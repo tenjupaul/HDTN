@@ -12,17 +12,15 @@ jobs:
     steps:
        - uses: actions/checkout@v3
        
-       - name: Preparing the env
+       - name: Coverity Scan
          run: |
           export PATH=/opt/cov-analysis-2022.6.0/bin:$PATH
           cd /home/ubuntu/NASA-HDTN/HDTN/build
           make clean
           
-       - name: Coverity Build
-         run: |
+          # Coverity Build
           cov-build --dir idir make -j8
           
-       - name: Coverity Analysis
-         run: |
+          #Coverity Analyze
           cov-analyze --dir idir --all --enable-constraint-fpp --enable-fnptr --enable-virtual --strip-path /home/ubuntu/NASA-HDTN/HDTN
         
