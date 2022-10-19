@@ -1,0 +1,28 @@
+name: coverity-scan
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  coverity:
+    runs-on:
+      - self-hosted
+      - cov-analysis
+    
+    steps:
+       - uses: actions/checkout@v3
+       
+       - name: Preparing the env
+         run: |
+          export PATH=/opt/cov-analysis-2022.6.0/bin:$PATH
+          cd /home/ubuntu/NASA-HDTN/HDTN/build
+          make clean
+          
+       - name: Coverity Build
+         run: |
+          cov-build --dir idir make -j8
+          
+       - name: Coverity Analysis
+         run: |
+          cov-analyze --dir idir --all --enable-constraint-fpp --enable-fnptr --enable-virtual --strip-path /home/ubuntu/NASA-HDTN/HDTN
+        
